@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: reactive_capability_microservice
+
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5433/capabilities-db
+    username: usuario
+    password: clave123
+
+  flyway:
+    enabled: true
+    url: jdbc:postgresql://localhost:5433/capabilities-db
+    user: usuario
+    password: clave123
+
+  main:
+    web-application-type: reactive
+
+server:
+  port: 8081
+
+technology-service:
+  base-url: http://localhost:8080
+
+logging:
+  level:
+    root: INFO
+    org.springframework.r2dbc: DEBUG
+    org.springframework.web.reactive.function.client: DEBUG
