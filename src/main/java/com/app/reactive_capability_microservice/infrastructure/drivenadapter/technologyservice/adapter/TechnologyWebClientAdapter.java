@@ -1,5 +1,6 @@
 package com.app.reactive_capability_microservice.infrastructure.drivenadapter.technologyservice.adapter;
 
+import com.app.reactive_capability_microservice.domain.model.Technology;
 import com.app.reactive_capability_microservice.domain.records.InvalidTechnologyValidationResult;
 import com.app.reactive_capability_microservice.domain.spi.ITechnologyGateway;
 import com.app.reactive_capability_microservice.infrastructure.drivenadapter.technologyservice.dto.CapabilityTechnologyRequestDTO;
@@ -10,6 +11,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Collections;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class TechnologyWebClientAdapter implements ITechnologyGateway {
@@ -43,6 +45,16 @@ public class TechnologyWebClientAdapter implements ITechnologyGateway {
                                 .retrieve()
                                 .bodyToMono(Void.class)
                 );
+    }
+
+    @Override
+    public Mono<List<Technology>> getTechnologiesByCapabilityId(Long capabilityId) {
+        return webClient
+                .get()
+                .uri("/api/technologies/by-capability/{id}", capabilityId)
+                .retrieve()
+                .bodyToFlux(Technology.class)
+                .collectList();
     }
 
 }

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
@@ -15,5 +16,10 @@ public class CapabilityRouterRest {
     @Bean(name = "capabilityRouterRestBean")
     public RouterFunction<ServerResponse> capabilityTechnologyRouter (ICapabilityHandler handler) {
         return route(POST("/api/capabilities"), handler::listenPOSTCreateCapability);
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> capabilityRouter(ICapabilityHandler handler) {
+        return route(GET("/api/capabilities"), handler::listenGETCapabilities);
     }
 }

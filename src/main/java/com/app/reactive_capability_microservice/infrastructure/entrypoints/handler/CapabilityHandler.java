@@ -1,6 +1,7 @@
 package com.app.reactive_capability_microservice.infrastructure.entrypoints.handler;
 
 import com.app.reactive_capability_microservice.domain.api.ICapabilityServicePort;
+import com.app.reactive_capability_microservice.domain.api.IGetAllCapacitiesServicePort;
 import com.app.reactive_capability_microservice.domain.enums.TechnicalMessage;
 import com.app.reactive_capability_microservice.domain.exception.BussinesException;
 import com.app.reactive_capability_microservice.domain.model.Capability;
@@ -25,6 +26,7 @@ public class CapabilityHandler implements ICapabilityHandler {
     private final ITechnologyGateway technologyGateway;
     private final CapabilityMapperDTO mapper;
     private final DtoValidator dtoValidator;
+    private final IGetAllCapacitiesServicePort getAllCapacitiesServicePort;
 
     @Override
     public Mono<ServerResponse> listenPOSTCreateCapability(ServerRequest serverRequest) {
@@ -60,5 +62,18 @@ public class CapabilityHandler implements ICapabilityHandler {
                                         );
                             });
                 });
+    }
+
+    @Override
+    public Mono<ServerResponse> listenGETCapabilities(ServerRequest request) {
+        String sortBy = request.queryParam("sortBy").orElse("name");
+        Boolean asc = Boolean.parseBoolean(request.queryParam("asc").orElse("true"));
+        Integer page = Integer.parseInt(request.queryParam("page").orElse("0"));
+        Integer size = Integer.parseInt(request.queryParam("size").orElse("10"));
+
+        return getAllCapacitiesServicePort
+                .getAllCapabilities(sortBy, asc, page, size)
+                .collectList()
+                .flatMap(result -> ServerResponse.ok().bodyValue(result));
     }
 }

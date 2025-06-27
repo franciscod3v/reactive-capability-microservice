@@ -12,7 +12,6 @@ public class CapabilityEntityMapper {
         entity.setId(capability.getId()); // opcional si es autogenerado
         entity.setName(capability.getName());
         entity.setDescription(capability.getDescription());
-        // technologyIds se ignora aquí porque se maneja en otra tabla
         return entity;
     }
 
@@ -21,7 +20,7 @@ public class CapabilityEntityMapper {
                 entity.getId(),
                 entity.getName(),
                 entity.getDescription(),
-                null // no tienes info de technologyIds aquí
+                null
         );
     }
 }
