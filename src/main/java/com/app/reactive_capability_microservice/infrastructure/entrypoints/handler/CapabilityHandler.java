@@ -2,6 +2,7 @@ package com.app.reactive_capability_microservice.infrastructure.entrypoints.hand
 
 import com.app.reactive_capability_microservice.domain.api.ICapabilityServicePort;
 import com.app.reactive_capability_microservice.domain.api.IGetAllCapacitiesServicePort;
+import com.app.reactive_capability_microservice.domain.api.IGetCapabilitiesWithTechnologiesByBootcampIdServicePort;
 import com.app.reactive_capability_microservice.domain.enums.TechnicalMessage;
 import com.app.reactive_capability_microservice.domain.exception.BusinessException;
 import com.app.reactive_capability_microservice.domain.model.Capability;
@@ -27,6 +28,7 @@ public class CapabilityHandler implements ICapabilityHandler {
     private final CapabilityMapperDTO mapper;
     private final DtoValidator dtoValidator;
     private final IGetAllCapacitiesServicePort getAllCapacitiesServicePort;
+    private final IGetCapabilitiesWithTechnologiesByBootcampIdServicePort getCapabilitiesWithTechnologiesByBootcampId;
 
     @Override
     public Mono<ServerResponse> listenPOSTCreateCapability(ServerRequest serverRequest) {
@@ -75,5 +77,13 @@ public class CapabilityHandler implements ICapabilityHandler {
                 .getAllCapabilities(sortBy, asc, page, size)
                 .collectList()
                 .flatMap(result -> ServerResponse.ok().bodyValue(result));
+    }
+
+    @Override
+    public Mono<ServerResponse> listenGETCapabilitiesByBootcampId(ServerRequest request) {
+        Long bootcampId = Long.parseLong(request.pathVariable("bootcampId"));
+
+        return getCapabilitiesWithTechnologiesByBootcampId.getCapabilitiesWithTechnologiesByBootcampId(bootcampId)
+                .flatMap(list -> ServerResponse.ok().bodyValue(list));
     }
 }

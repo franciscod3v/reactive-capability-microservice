@@ -14,12 +14,9 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class CapabilityRouterRest {
 
     @Bean(name = "capabilityRouterRestBean")
-    public RouterFunction<ServerResponse> capabilityTechnologyRouter (ICapabilityHandler handler) {
-        return route(POST("/api/capabilities"), handler::listenPOSTCreateCapability);
-    }
-
-    @Bean
-    public RouterFunction<ServerResponse> capabilityRouter(ICapabilityHandler handler) {
-        return route(GET("/api/capabilities"), handler::listenGETCapabilities);
+    public RouterFunction<ServerResponse> capabilityRoutes(ICapabilityHandler handler) {
+        return route(POST("/api/capabilities"), handler::listenPOSTCreateCapability)
+                .andRoute(GET("/api/capabilities"), handler::listenGETCapabilities)
+                .andRoute(GET("/api/capabilities/by-bootcamp/{bootcampId}"), handler::listenGETCapabilitiesByBootcampId);
     }
 }

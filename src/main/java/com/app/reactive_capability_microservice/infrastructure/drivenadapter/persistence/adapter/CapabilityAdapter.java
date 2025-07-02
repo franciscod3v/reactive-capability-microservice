@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class CapabilityAdapter implements ICapabilityPersistencePort, IGetAllCapabilitiesPersistencePort {
 
@@ -30,6 +32,14 @@ public class CapabilityAdapter implements ICapabilityPersistencePort, IGetAllCap
         return repository
                 .findByName(name)
                 .map(mapper::toDomain);
+    }
+
+    @Override
+    public Mono<List<Capability>> getCapabilitiesByBootcampId(Long bootcampId) {
+        return repository
+                .findAllByBootcampId(bootcampId)
+                .map(mapper::toDomain)
+                .collectList();
     }
 
     @Override

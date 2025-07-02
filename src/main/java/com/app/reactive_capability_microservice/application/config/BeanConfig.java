@@ -3,6 +3,7 @@ package com.app.reactive_capability_microservice.application.config;
 import com.app.reactive_capability_microservice.domain.api.IBootcampCapabilityServicePort;
 import com.app.reactive_capability_microservice.domain.api.ICapabilityServicePort;
 import com.app.reactive_capability_microservice.domain.api.IGetAllCapacitiesServicePort;
+import com.app.reactive_capability_microservice.domain.api.IGetCapabilitiesWithTechnologiesByBootcampIdServicePort;
 import com.app.reactive_capability_microservice.domain.spi.IBootcampCapabilityPersistencePort;
 import com.app.reactive_capability_microservice.domain.spi.ICapabilityPersistencePort;
 import com.app.reactive_capability_microservice.domain.spi.IGetAllCapabilitiesPersistencePort;
@@ -10,6 +11,7 @@ import com.app.reactive_capability_microservice.domain.spi.ITechnologyGateway;
 import com.app.reactive_capability_microservice.domain.usecase.CreateBootcampCapabilityUseCase;
 import com.app.reactive_capability_microservice.domain.usecase.CreateCapabilityUseCase;
 import com.app.reactive_capability_microservice.domain.usecase.GetAllCapabilitiesUseCase;
+import com.app.reactive_capability_microservice.domain.usecase.GetCapabilitiesWithTechnologiesByBootcampIdUseCase;
 import com.app.reactive_capability_microservice.infrastructure.drivenadapter.persistence.adapter.BootcampCapabilityAdapter;
 import com.app.reactive_capability_microservice.infrastructure.drivenadapter.persistence.adapter.CapabilityAdapter;
 import com.app.reactive_capability_microservice.infrastructure.drivenadapter.persistence.mapper.BootcampCapabilityEntityMapper;
@@ -89,5 +91,16 @@ public class BeanConfig {
             IBootcampCapabilityPersistencePort bootcampCapabilityPersistencePort
     ) {
         return new CreateBootcampCapabilityUseCase(bootcampCapabilityPersistencePort);
+    }
+
+    @Bean
+    public IGetCapabilitiesWithTechnologiesByBootcampIdServicePort getCapabilitiesWithTechnologiesByBootcampId(
+            ICapabilityPersistencePort capabilityPersistencePort,
+            ITechnologyGateway technologyGateway
+    ) {
+        return new GetCapabilitiesWithTechnologiesByBootcampIdUseCase(
+                capabilityPersistencePort,
+                technologyGateway
+        );
     }
 }

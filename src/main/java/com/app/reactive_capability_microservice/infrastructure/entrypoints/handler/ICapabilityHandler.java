@@ -8,4 +8,6 @@ public interface ICapabilityHandler {
     Mono<ServerResponse> listenPOSTCreateCapability(ServerRequest serverRequest);
 
     Mono<ServerResponse> listenGETCapabilities(ServerRequest request);
+
+    Mono<ServerResponse> listenGETCapabilitiesByBootcampId(ServerRequest request);
 }
