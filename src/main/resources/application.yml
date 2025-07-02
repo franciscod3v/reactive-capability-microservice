@@ -8,6 +8,7 @@ spring:
     password: clave123
 
   flyway:
+    baseline-on-migrate: true
     enabled: true
     url: jdbc:postgresql://localhost:5433/capabilities-db
     user: usuario

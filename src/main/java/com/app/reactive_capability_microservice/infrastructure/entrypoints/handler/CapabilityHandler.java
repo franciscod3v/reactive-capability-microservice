@@ -3,7 +3,7 @@ package com.app.reactive_capability_microservice.infrastructure.entrypoints.hand
 import com.app.reactive_capability_microservice.domain.api.ICapabilityServicePort;
 import com.app.reactive_capability_microservice.domain.api.IGetAllCapacitiesServicePort;
 import com.app.reactive_capability_microservice.domain.enums.TechnicalMessage;
-import com.app.reactive_capability_microservice.domain.exception.BussinesException;
+import com.app.reactive_capability_microservice.domain.exception.BusinessException;
 import com.app.reactive_capability_microservice.domain.model.Capability;
 import com.app.reactive_capability_microservice.domain.spi.ITechnologyGateway;
 import com.app.reactive_capability_microservice.infrastructure.entrypoints.dto.CapabilityRequestDTO;
@@ -34,22 +34,22 @@ public class CapabilityHandler implements ICapabilityHandler {
                 .flatMap(dtoValidator::validateDto)
                 .flatMap(dto -> {
                     if (dto.getTechnologyIds() == null || dto.getTechnologyIds().size() < 3) {
-                        return Mono.error(new BussinesException(TechnicalMessage.MINIMUM_TECHNOLOGIES_REQUIRED));
+                        return Mono.error(new BusinessException(TechnicalMessage.MINIMUM_TECHNOLOGIES_REQUIRED));
                     }
 
                     if (dto.getTechnologyIds().size() > 20) {
-                        return Mono.error(new BussinesException(TechnicalMessage.MAXIMUM_TECHNOLOGIES_ALLOWED));
+                        return Mono.error(new BusinessException(TechnicalMessage.MAXIMUM_TECHNOLOGIES_ALLOWED));
                     }
 
                     long uniqueCount = dto.getTechnologyIds().stream().distinct().count();
                     if (uniqueCount < dto.getTechnologyIds().size()) {
-                        return Mono.error(new BussinesException(TechnicalMessage.DUPLICATE_TECHNOLOGIES));
+                        return Mono.error(new BusinessException(TechnicalMessage.DUPLICATE_TECHNOLOGIES));
                     }
 
                     return technologyGateway.validateTechnologyIdsExist(Flux.fromIterable(dto.getTechnologyIds()))
                             .flatMap(validation -> {
                                 if (!validation.valid()) {
-                                    return Mono.error(new BussinesException(TechnicalMessage.BAD_REQUEST));
+                                    return Mono.error(new BusinessException(TechnicalMessage.BAD_REQUEST));
                                 }
 
                                 Capability model = mapper.toModel(dto);

@@ -1,7 +1,7 @@
 package com.app.reactive_capability_microservice.infrastructure.entrypoints.exceptions;
 
 import com.app.reactive_capability_microservice.domain.enums.TechnicalMessage;
-import com.app.reactive_capability_microservice.domain.exception.BussinesException;
+import com.app.reactive_capability_microservice.domain.exception.BusinessException;
 import com.app.reactive_capability_microservice.domain.exception.TechnicalException;
 import com.app.reactive_capability_microservice.infrastructure.entrypoints.dto.ErrorDTO;
 import org.springframework.boot.autoconfigure.web.WebProperties;
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler extends AbstractErrorWebExceptionHandler {
 
         switch (error) {
 
-            case BussinesException be -> {
+            case BusinessException be -> {
 
                 var tm = be.getTechnicalMessage();
 

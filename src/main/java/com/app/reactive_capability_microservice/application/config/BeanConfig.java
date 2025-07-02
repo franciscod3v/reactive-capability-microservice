@@ -1,15 +1,21 @@
 package com.app.reactive_capability_microservice.application.config;
 
+import com.app.reactive_capability_microservice.domain.api.IBootcampCapabilityServicePort;
 import com.app.reactive_capability_microservice.domain.api.ICapabilityServicePort;
 import com.app.reactive_capability_microservice.domain.api.IGetAllCapacitiesServicePort;
+import com.app.reactive_capability_microservice.domain.spi.IBootcampCapabilityPersistencePort;
 import com.app.reactive_capability_microservice.domain.spi.ICapabilityPersistencePort;
 import com.app.reactive_capability_microservice.domain.spi.IGetAllCapabilitiesPersistencePort;
 import com.app.reactive_capability_microservice.domain.spi.ITechnologyGateway;
+import com.app.reactive_capability_microservice.domain.usecase.CreateBootcampCapabilityUseCase;
 import com.app.reactive_capability_microservice.domain.usecase.CreateCapabilityUseCase;
 import com.app.reactive_capability_microservice.domain.usecase.GetAllCapabilitiesUseCase;
+import com.app.reactive_capability_microservice.infrastructure.drivenadapter.persistence.adapter.BootcampCapabilityAdapter;
 import com.app.reactive_capability_microservice.infrastructure.drivenadapter.persistence.adapter.CapabilityAdapter;
+import com.app.reactive_capability_microservice.infrastructure.drivenadapter.persistence.mapper.BootcampCapabilityEntityMapper;
 import com.app.reactive_capability_microservice.infrastructure.drivenadapter.persistence.mapper.CapabilityEntityMapper;
 import com.app.reactive_capability_microservice.infrastructure.drivenadapter.persistence.repository.CapabilityCustomRepository;
+import com.app.reactive_capability_microservice.infrastructure.drivenadapter.persistence.repository.IBootcampCapabilityRepository;
 import com.app.reactive_capability_microservice.infrastructure.drivenadapter.persistence.repository.ICapabilityRepository;
 import com.app.reactive_capability_microservice.infrastructure.drivenadapter.technologyservice.adapter.TechnologyWebClientAdapter;
 import org.springframework.context.annotation.Bean;
@@ -68,5 +74,20 @@ public class BeanConfig {
             ITechnologyGateway technologyGateway
     ) {
         return new GetAllCapabilitiesUseCase(getAllCapabilitiesPersistencePort, technologyGateway);
+    }
+
+    @Bean
+    public IBootcampCapabilityPersistencePort bootcampCapabilityPersistencePort(
+            IBootcampCapabilityRepository repository,
+            BootcampCapabilityEntityMapper mapper
+    ) {
+        return new BootcampCapabilityAdapter(repository, mapper);
+    }
+
+    @Bean
+    public IBootcampCapabilityServicePort bootcampCapabilityServicePort(
+            IBootcampCapabilityPersistencePort bootcampCapabilityPersistencePort
+    ) {
+        return new CreateBootcampCapabilityUseCase(bootcampCapabilityPersistencePort);
     }
 }

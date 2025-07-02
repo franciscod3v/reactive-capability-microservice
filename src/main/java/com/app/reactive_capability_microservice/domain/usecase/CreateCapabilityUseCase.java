@@ -2,7 +2,7 @@ package com.app.reactive_capability_microservice.domain.usecase;
 
 import com.app.reactive_capability_microservice.domain.api.ICapabilityServicePort;
 import com.app.reactive_capability_microservice.domain.enums.TechnicalMessage;
-import com.app.reactive_capability_microservice.domain.exception.BussinesException;
+import com.app.reactive_capability_microservice.domain.exception.BusinessException;
 import com.app.reactive_capability_microservice.domain.model.Capability;
 import com.app.reactive_capability_microservice.domain.spi.ICapabilityPersistencePort;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class CreateCapabilityUseCase implements ICapabilityServicePort {
                 .hasElement()
                 .flatMap(exists -> {
                     if (exists) {
-                        return Mono.error(new BussinesException(TechnicalMessage.CAPABILITY_ALREADY_EXISTS));
+                        return Mono.error(new BusinessException(TechnicalMessage.CAPABILITY_ALREADY_EXISTS));
                     }
                     return persistenceAdapter.createCapability(capability);
                 });
